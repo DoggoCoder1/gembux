@@ -11,29 +11,25 @@
   <p id="result"></p>
 
   <script>
-    async function checkUsername() {
-      const username = document.getElementById("username").value;
-      const result = document.getElementById("result");
+async function checkUsername() {
+  const username = document.getElementById("username").value;
+  const result = document.getElementById("result");
 
-      if (!username) {
-        result.textContent = "Please enter a username.";
-        return;
-      }
+  const response = await fetch("/api/check-username", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username })
+  });
 
-      const response = await fetch("/api/check-username", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username })
-      });
+  const data = await response.json();
 
-      const data = await response.json();
+  if (data.exists) {
+    result.textContent = "❌ Username is taken.";
+  } else {
+    result.textContent = "✅ Username is available.";
+  }
+}
 
-      if (data.code === 0) {
-        result.textContent = "✅ Username is available!";
-      } else {
-        result.textContent = "❌ Username is taken or invalid.";
-      }
-    }
   </script>
 </body>
 </html>

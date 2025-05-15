@@ -238,6 +238,12 @@
     console.log(err);
   }
 });
+app.get('/', (req, res) => {
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  console.log("Client IP:", ip);
+  res.send("Your IP is: " + ip);
+});
+
 </script>
 </body>
 </html>

